@@ -14,48 +14,46 @@ using Newtonsoft.Json;
 
 namespace colorsRest.Tests.IntegrationTests
 {
-    public class IndexPageTests : IClassFixture<WebApplicationFactory<colorsRest.Startup>>
+    public class ColorRestTests : IClassFixture<WebApplicationFactory<colorsRest.Startup>>
     {
         private readonly HttpClient _client;
 
-        public IndexPageTests(
+        public ColorRestTests(
             WebApplicationFactory<colorsRest.Startup> webAppFactory)
         {
             var testWebAppFactory = webAppFactory.WithWebHostBuilder(builder =>
             {
                 builder.ConfigureServices(services =>
                 {
-                    // Create a new service provider.
+                    // Crear una nova BDD amb base de dades i serveis (que no calen)
                     var serviceProvider = new ServiceCollection()
                         .AddEntityFrameworkInMemoryDatabase()
                         .BuildServiceProvider();
 
-                    // Add a database context (AppDbContext) using an in-memory 
-                    // database for testing.
+                    // Crear una base de dades només per fer les proves
                     services.AddDbContext<ColorsContext>(options =>
                         {
                             options.UseInMemoryDatabase("InMemoryDbForTests");
                             options.UseInternalServiceProvider(serviceProvider);
                         });
 
-                    // Build the service provider.
+                    // No cal però l'hi deixo com a referència
                     var sp = services.BuildServiceProvider();
 
-                    // Create a scope to obtain a reference to the database
                     // context (ColorsContext).
                     using (var scope = sp.CreateScope())
                     {
                         var scopedServices = scope.ServiceProvider;
                         var db = scopedServices.GetRequiredService<ColorsContext>();
                         var logger = scopedServices
-                            .GetRequiredService<ILogger<IndexPageTests>>();
+                            .GetRequiredService<ILogger<ColorRestTests>>();
 
-                        // Ensure the database is created.
+                        // Comprovar que s'ha creat la base de dades
                         db.Database.EnsureCreated();
 
                         try
                         {
-                            // Seed the database with test data.
+                            // Entrar les dades d'exemple
                             Utilities.InitializeDbForTests(db);
                         }
                         catch (Exception ex)
@@ -67,10 +65,12 @@ namespace colorsRest.Tests.IntegrationTests
                 });
             });
 
-            // Create an HttpClient to submit requests against the test host.
+            // Crear el client per enviar les peticions al servidor
             _client = testWebAppFactory.CreateDefaultClient();
         }
 
+        /// Comprovar que amb dades correctes el resultat es torna bé
+        ///
         public static IEnumerable<object[]> CorrectResults =>
         new List<object[]>
         {
@@ -98,6 +98,8 @@ namespace colorsRest.Tests.IntegrationTests
             Assert.Equal(expected.Rgb, data.Rgb);
         }
 
+        /// Comprovar que dóna 404 quan s'intenta anar a recuperar
+        /// dades que **no existeixen**
         public static IEnumerable<object[]> FailedResults =>
         new List<object[]>
         {
