@@ -75,9 +75,10 @@ namespace colorsRest.Tests.IntegrationTests
         new List<object[]>
         {
             new object[] { 1, new Color(){Id=1, Nom="vermell", Rgb="#FF0000"} },
-            new object[] { 3, new Color(){Id=3, Nom="negre", Rgb="#000000" } },           
+            new object[] { 2, new Color(){Id=2, Nom="verd", Rgb="#00FF00" } },
+            new object[] { 3, new Color(){Id=3, Nom="negre", Rgb="#000000" } },
         };
-               
+
         [Theory]
         [MemberData(nameof(CorrectResults))]
         public async Task GetAnCorrectColorFromService(int id, Color expected)
@@ -95,6 +96,25 @@ namespace colorsRest.Tests.IntegrationTests
             Assert.Equal(expected.Id, data.Id);
             Assert.Equal(expected.Nom, data.Nom);
             Assert.Equal(expected.Rgb, data.Rgb);
+        }
+
+        public static IEnumerable<object[]> FailedResults =>
+        new List<object[]>
+        {
+            new object[] { 0 },
+            new object[] { 99 },
+            new object[] { -1 },
+        };
+
+        [Theory]
+        [MemberData(nameof(FailedResults))]
+        public async Task GetAnInexistentColorFromService(int id)
+        {
+            // Act
+            var response = await _client.GetAsync("/api/colors/" + id);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 
     }
