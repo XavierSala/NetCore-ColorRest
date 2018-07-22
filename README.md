@@ -29,6 +29,7 @@ Només s'ofereixen dos punts de connexió:
 | /api/colors   | Retorna tots els colors de la base de dades |
 | /api/colors/1 | Retorna el color amb l'id especificat       |
 
+El programa hauria de fer algunes comprovacions més, retornar errors diferents, i totes aquestes coses, però com que l'objectiu era provar els testos per ara ho deixo així
 
 Tests funcionals
 --------------------------
