@@ -33,12 +33,11 @@ Només s'ofereixen dos punts de connexió:
 Tests funcionals
 --------------------------
 La idea de tot plegat era aconseguir fer els tests funcionals amb Net Core 2.1 (els unitaris són relativament semblants als de
-Java). Faig servir xunit.
+Java). Faig servir xunit (que sembla que és el que es porta ara).
 
 L'execució és idèntica a executar un programa: 
 
     $ cd tests/functional/
-    $ dotnet test
     $ dotnet test
     Build started, please wait...
     Build completed.
@@ -58,7 +57,7 @@ i executar-hi els testos. He creat una classe a part *Helpers.cs* per entrar les
 dades en memòria.
 
 Tant els testos com el programa són senzillets però els he fet per comprovar com funciona tot plegat. Crec que si ho 
-compliqués més potser no quedaria tant clar com fer els testos funcionals.
+compliqués més no quedaria tant clar com es fan els testos funcionals.
 
 
     
