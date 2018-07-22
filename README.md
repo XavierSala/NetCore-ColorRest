@@ -57,7 +57,7 @@ La idea és iniciar un servidor de proves
 i executar-hi els testos. He creat una classe a part *Helpers.cs* per entrar les dades de prova en una base de
 dades en memòria.
 
-Tant els testos com el programa són senzillets però els he fet per comprovar com funciona tot plegat i crec que si ho 
+Tant els testos com el programa són senzillets però els he fet per comprovar com funciona tot plegat. Crec que si ho 
 compliqués més potser no quedaria tant clar com fer els testos funcionals.
 
 
