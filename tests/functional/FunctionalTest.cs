@@ -8,11 +8,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Xunit;
+using Newtonsoft.Json;
+using System.Text;
+using FluentAssertions;
+
 using colorsRest.Models;
 using colorsRest.Controllers;
-using Newtonsoft.Json;
 
-namespace colorsRest.Tests.IntegrationTests
+namespace colorsRest.Tests.FuncionalTests
 {
     public class ColorRestTests : IClassFixture<WebApplicationFactory<colorsRest.Startup>>
     {
@@ -118,6 +121,84 @@ namespace colorsRest.Tests.IntegrationTests
             // Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
+
+        /// Comprovar que els elements s'afegeixen bé
+        public static IEnumerable<object[]> newCorrectElements =>
+        new List<object[]>
+        {
+            new object[] {"blanc", "#FFFFFF" },
+            new object[] {"blau", "#0000FF" }
+        };
+
+        [Theory]
+        [MemberData(nameof(newCorrectElements))]
+        public async Task AddElementsShouldWorkIfDataIsCorrect(string nom, string codi)
+        {
+            // Given
+            var colorToAdd = new Color()
+            {
+                Nom = nom,
+                Rgb = codi
+            };
+            var content = JsonConvert.SerializeObject(colorToAdd);
+            var stringContent = new StringContent(content, Encoding.UTF8, "application/json");
+
+            // When
+            // var x = new FormUrlEncodedContent(formData);
+            var response = await _client.PostAsync("/api/colors", stringContent);
+
+            // Then
+            response.EnsureSuccessStatusCode();
+        }
+
+
+        /// Comprovar que els elements no s'afegeixen quan no hi ha nom
+        [Fact]
+        public async Task AddElementsShouldFailWithoutNom()
+        {
+            // Given
+            var colorToAdd = new Color()
+            {
+                Rgb = "#FF00FF"
+            };
+            var content = JsonConvert.SerializeObject(colorToAdd);
+            var stringContent = new StringContent(content, Encoding.UTF8, "application/json");
+
+            // When
+            var response = await _client.PostAsync("/api/colors", stringContent);
+
+            // Then
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var responseString = await response.Content.ReadAsStringAsync();
+            responseString.Should().Contain("The Nom field is required");
+        }
+
+        /// Comprovar que els elements no s'afegeixen quan no hi ha nom
+        [Theory]
+        [InlineData("#FF")]
+        [InlineData("FFFFFF")]
+        [InlineData("#")]
+        [InlineData("#FFFFFF0")]
+        [InlineData("#XXXXXX")]
+        public async Task AddElementsShouldFailWithoutCorrectRgbCode(string data)
+        {
+            // Given
+            var colorToAdd = new Color()
+            {
+                Rgb = data
+            };
+            var content = JsonConvert.SerializeObject(colorToAdd);
+            var stringContent = new StringContent(content, Encoding.UTF8, "application/json");
+
+            // When
+            var response = await _client.PostAsync("/api/colors", stringContent);
+
+            // Then
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var responseString = await response.Content.ReadAsStringAsync();
+            responseString.Should().Contain(Color.RGB_ERROR);
+        }
+
 
     }
 }

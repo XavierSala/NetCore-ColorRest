@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using colorsRest.Models;
+using colorsRest.Repository;
 
 namespace colorsRest.Controllers
 {
@@ -12,45 +13,46 @@ namespace colorsRest.Controllers
     [ApiController]
     public class ColorsController : Controller
     {
-        private readonly ColorsContext _context;
+        private readonly IColorsRepository _repository;
         private readonly ILogger<ColorsController> _logger;
-        
 
-        public ColorsController(ColorsContext context, ILogger<ColorsController> logger)
+
+        public ColorsController(IColorsRepository repository, ILogger<ColorsController> logger)
         {
-            _context = context;
+            _repository = repository;
             _logger = logger;
 
-            if (_context.Colors.Count() == 0)
-            {
-                
-                _logger.LogWarning("Database Empty");
-                _context.Colors.Add(new Color { Nom = "vermell", Rgb = "#FF0000" });
-                _context.Colors.Add(new Color { Nom = "verd", Rgb = "#00FF00" });
-                _context.Colors.Add(new Color { Nom = "blau", Rgb = "#0000FF" });
-                _context.SaveChanges();
-            }
         }
 
 
         // GET api/colors
         [HttpGet]
-        public ActionResult<List<Color>> GetAll()
+        public ActionResult<IList<Color>> GetAll()
         {
             _logger.LogInformation("All items requested");
-            return _context.Colors.ToList();
+            return Json(_repository.Get());
+        }
+
+        [HttpPost]
+        public ActionResult Add([FromBody]Color value)
+        {
+            bool v = _repository.Add(value);
+            if (v)
+            {
+                return Accepted();
+            }
+            return BadRequest();
         }
 
         // GET api/colors/5
         [HttpGet("{id}", Name = "GetColor")]
         public ActionResult<Color> GetById(int id)
         {
-            var resultat = _context.Colors.Find(id);
+            var resultat = _repository.Get(id);
             if (resultat == null)
             {
                 return NotFound();
             }
-
             return resultat;
         }
 

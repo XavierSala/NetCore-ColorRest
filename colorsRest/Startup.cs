@@ -8,8 +8,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using colorsRest.Models;
 using Microsoft.EntityFrameworkCore;
+
+using colorsRest.Models;
+using colorsRest.Repository;
 
 namespace colorsRest
 {
@@ -25,20 +27,22 @@ namespace colorsRest
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ColorsContext>(opt => 
+            services.AddDbContext<ColorsContext>(opt =>
                 // opt.UseInMemoryDatabase("colors"));
                 opt.UseSqlite(Configuration.GetConnectionString("Sqlite"))
             );
-            
+
             services.AddMvc();
-//            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            //            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddScoped<IColorsRepository, ColorsRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-	        loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-        
+            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
