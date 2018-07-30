@@ -149,6 +149,13 @@ namespace colorsRest.Tests.FuncionalTests
 
             // Then
             response.EnsureSuccessStatusCode();
+
+            // Comprovar que retorna l'afegit
+            var json = await response.Content.ReadAsStringAsync();
+            var data = JsonConvert.DeserializeObject<Color>(json);
+            Assert.NotEqual(0, data.Id);
+            Assert.Equal(nom, data.Nom);
+            Assert.Equal(codi, data.Rgb);
         }
 
 
@@ -221,7 +228,7 @@ namespace colorsRest.Tests.FuncionalTests
         }
 
 
-        /// Comprovar que els elements s'afegeixen bé
+        /// Comprovar que afegir elements inventant-se un Id dóna error
         public static IEnumerable<object[]> newDuplicatedElements =>
         new List<object[]>
         {
@@ -238,7 +245,6 @@ namespace colorsRest.Tests.FuncionalTests
             var stringContent = new StringContent(content, Encoding.UTF8, "application/json");
 
             // When
-            // var x = new FormUrlEncodedContent(formData);
             var response = await _client.PostAsync("/api/colors", stringContent);
 
             // Then

@@ -33,13 +33,15 @@ namespace colorsRest.Controllers
             return Json(_repository.Get());
         }
 
+        // POST api/colors
         [HttpPost]
         public ActionResult Add([FromBody]Color value)
         {
             bool v = _repository.Add(value);
             if (v)
             {
-                return Accepted();
+                return CreatedAtAction(nameof(GetById), new { id = value.Id }, value);
+                // return Accepted();
             }
             return BadRequest();
         }

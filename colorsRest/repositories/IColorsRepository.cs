@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+
 using colorsRest.Models;
 
 namespace colorsRest.Repository
@@ -10,6 +12,7 @@ namespace colorsRest.Repository
         Color Get(int id);
         IList<Color> Get();
         bool Add(Color item);
+        Task<int> AddProductAsync(Color item);
         void Update(Color item);
         void Delete(int id);
     }

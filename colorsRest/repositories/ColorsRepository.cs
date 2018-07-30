@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+
 
 using colorsRest.Models;
 
@@ -36,6 +38,16 @@ namespace colorsRest.Repository
                 catch (Exception) { };
             }
             return false;
+        }
+
+        public async Task<int> AddProductAsync(Color item)
+        {
+            int rowsAffected = 0;
+
+            _context.Colors.Add(item);
+            rowsAffected = await _context.SaveChangesAsync();
+
+            return rowsAffected;
         }
 
         public void Delete(int id)
