@@ -173,7 +173,8 @@ namespace colorsRest.Tests.FuncionalTests
             responseString.Should().Contain("The Nom field is required");
         }
 
-        /// Comprovar que els elements no s'afegeixen quan no hi ha nom
+        /// Comprovar que els elements no s'afegeixen quan no hi ha nom i el
+        /// Rgb està mal format.
         [Theory]
         [InlineData("#FF")]
         [InlineData("FFFFFF")]
@@ -197,6 +198,51 @@ namespace colorsRest.Tests.FuncionalTests
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
             var responseString = await response.Content.ReadAsStringAsync();
             responseString.Should().Contain(Color.RGB_ERROR);
+        }
+
+        /// Comprovar que els elements no s'afegeixen quan no hi ha res i que donen error
+        /// em tots dos camps
+        [Fact]
+        public async Task AddElementsNoData()
+        {
+            // Given
+            var colorToAdd = new Color();
+            var content = JsonConvert.SerializeObject(colorToAdd);
+            var stringContent = new StringContent(content, Encoding.UTF8, "application/json");
+
+            // When
+            var response = await _client.PostAsync("/api/colors", stringContent);
+
+            // Then
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var responseString = await response.Content.ReadAsStringAsync();
+            responseString.Should().Contain("The Nom field is required")
+                               .And.Contain("The Rgb field is required");
+        }
+
+
+        /// Comprovar que els elements s'afegeixen bé
+        public static IEnumerable<object[]> newDuplicatedElements =>
+        new List<object[]>
+        {
+            new object[] {new Color(){ Id=1, Nom="fail", Rgb="#CACACA"} },
+            new object[] {new Color(){ Id=25, Nom="alsoFail", Rgb="#BACABA"} },
+        };
+
+        [Theory]
+        [MemberData(nameof(newDuplicatedElements))]
+        public async Task AddElementsShouldNotPermitIdEspcification(Color colorToAdd)
+        {
+            // Given
+            var content = JsonConvert.SerializeObject(colorToAdd);
+            var stringContent = new StringContent(content, Encoding.UTF8, "application/json");
+
+            // When
+            // var x = new FormUrlEncodedContent(formData);
+            var response = await _client.PostAsync("/api/colors", stringContent);
+
+            // Then
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
 
