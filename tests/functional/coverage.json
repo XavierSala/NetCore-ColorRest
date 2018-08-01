@@ -1,0 +1,505 @@
+{
+  "/home/xavier/work-random/programming/dotnet/NetCore-ColorRest/tests/functional/bin/Debug/netcoreapp2.1/colorsRest.dll": {
+    "/home/xavier/work-random/programming/dotnet/NetCore-ColorRest/colorsRest/Program.cs": {
+      "colorsRest.Program": {
+        "System.Void colorsRest.Program::Main(System.String[])": {
+          "Lines": {
+            "16": 0,
+            "18": 0,
+            "19": 0,
+            "20": 0
+          },
+          "Branches": []
+        },
+        "Microsoft.AspNetCore.Hosting.IWebHostBuilder colorsRest.Program::CreateWebHostBuilder(System.String[])": {
+          "Lines": {
+            "23": 17,
+            "24": 17
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/home/xavier/work-random/programming/dotnet/NetCore-ColorRest/colorsRest/Startup.cs": {
+      "colorsRest.Startup": {
+        "Microsoft.Extensions.Configuration.IConfiguration colorsRest.Startup::get_Configuration()": {
+          "Lines": {
+            "25": 17
+          },
+          "Branches": []
+        },
+        "System.Void colorsRest.Startup::ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)": {
+          "Lines": {
+            "29": 17,
+            "30": 17,
+            "31": 17,
+            "32": 17,
+            "33": 17,
+            "35": 17,
+            "38": 17,
+            "39": 17
+          },
+          "Branches": []
+        },
+        "System.Void colorsRest.Startup::Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IHostingEnvironment,Microsoft.Extensions.Logging.ILoggerFactory)": {
+          "Lines": {
+            "43": 17,
+            "44": 17,
+            "46": 17,
+            "47": 17,
+            "48": 17,
+            "49": 17,
+            "51": 17,
+            "52": 17
+          },
+          "Branches": [
+            {
+              "Line": 46,
+              "Offset": 32,
+              "EndOffset": 34,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 17
+            },
+            {
+              "Line": 46,
+              "Offset": 32,
+              "EndOffset": 43,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 17
+            }
+          ]
+        },
+        "System.Void colorsRest.Startup::.ctor(Microsoft.Extensions.Configuration.IConfiguration)": {
+          "Lines": {
+            "20": 17,
+            "21": 17,
+            "22": 17,
+            "23": 17
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/home/xavier/work-random/programming/dotnet/NetCore-ColorRest/colorsRest/repositories/ColorsRepository.cs": {
+      "colorsRest.Repository.ColorsRepository": {
+        "System.Boolean colorsRest.Repository.ColorsRepository::Add(colorsRest.Models.Color)": {
+          "Lines": {
+            "31": 4,
+            "32": 4,
+            "33": 2,
+            "35": 2,
+            "36": 2,
+            "37": 2,
+            "38": 2,
+            "41": 0,
+            "42": 0,
+            "44": 0,
+            "45": 0,
+            "46": 2,
+            "47": 4
+          },
+          "Branches": [
+            {
+              "Line": 32,
+              "Offset": 12,
+              "EndOffset": 14,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 2
+            },
+            {
+              "Line": 32,
+              "Offset": 12,
+              "EndOffset": 56,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 2
+            }
+          ]
+        },
+        "System.Void colorsRest.Repository.ColorsRepository::Delete(System.Int32)": {
+          "Lines": {
+            "60": 0,
+            "61": 0
+          },
+          "Branches": []
+        },
+        "colorsRest.Models.Color colorsRest.Repository.ColorsRepository::Get(System.Int32)": {
+          "Lines": {
+            "64": 6
+          },
+          "Branches": []
+        },
+        "System.Collections.Generic.IList`1<colorsRest.Models.Color> colorsRest.Repository.ColorsRepository::Get()": {
+          "Lines": {
+            "66": 0
+          },
+          "Branches": []
+        },
+        "System.Void colorsRest.Repository.ColorsRepository::Update(colorsRest.Models.Color)": {
+          "Lines": {
+            "69": 0,
+            "70": 0
+          },
+          "Branches": []
+        },
+        "System.Void colorsRest.Repository.ColorsRepository::.ctor(colorsRest.Models.ColorsContext)": {
+          "Lines": {
+            "16": 17,
+            "17": 17,
+            "18": 17,
+            "20": 17,
+            "21": 17,
+            "22": 17,
+            "24": 0,
+            "25": 0,
+            "26": 0,
+            "27": 0,
+            "28": 17
+          },
+          "Branches": [
+            {
+              "Line": 20,
+              "Offset": 36,
+              "EndOffset": 38,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 17
+            },
+            {
+              "Line": 20,
+              "Offset": 36,
+              "EndOffset": 44,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            }
+          ]
+        }
+      },
+      "colorsRest.Repository.ColorsRepository/<AddProductAsync>d__3": {
+        "System.Void colorsRest.Repository.ColorsRepository/<AddProductAsync>d__3::MoveNext()": {
+          "Lines": {
+            "50": 0,
+            "51": 0,
+            "53": 0,
+            "54": 0,
+            "56": 0,
+            "57": 0
+          },
+          "Branches": [
+            {
+              "Line": 54,
+              "Offset": 88,
+              "EndOffset": 90,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 54,
+              "Offset": 88,
+              "EndOffset": 155,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            }
+          ]
+        }
+      }
+    },
+    "/home/xavier/work-random/programming/dotnet/NetCore-ColorRest/colorsRest/models/Color.cs": {
+      "colorsRest.Models.Color": {
+        "System.String colorsRest.Models.Color::getRGBError()": {
+          "Lines": {
+            "11": 5,
+            "12": 5,
+            "13": 5
+          },
+          "Branches": []
+        },
+        "System.Int32 colorsRest.Models.Color::get_Id()": {
+          "Lines": {
+            "14": 732
+          },
+          "Branches": []
+        },
+        "System.String colorsRest.Models.Color::get_Nom()": {
+          "Lines": {
+            "17": 334
+          },
+          "Branches": []
+        },
+        "System.String colorsRest.Models.Color::get_Rgb()": {
+          "Lines": {
+            "22": 340
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/home/xavier/work-random/programming/dotnet/NetCore-ColorRest/colorsRest/models/ColorsContext.cs": {
+      "colorsRest.Models.ColorsContext": {
+        "System.Void colorsRest.Models.ColorsContext::OnConfiguring(Microsoft.EntityFrameworkCore.DbContextOptionsBuilder)": {
+          "Lines": {
+            "14": 34,
+            "15": 34,
+            "16": 34
+          },
+          "Branches": []
+        },
+        "Microsoft.EntityFrameworkCore.DbSet`1<colorsRest.Models.Color> colorsRest.Models.ColorsContext::get_Colors()": {
+          "Lines": {
+            "18": 76
+          },
+          "Branches": []
+        },
+        "System.Void colorsRest.Models.ColorsContext::.ctor(Microsoft.EntityFrameworkCore.DbContextOptions`1<colorsRest.Models.ColorsContext>)": {
+          "Lines": {
+            "8": 34,
+            "9": 34,
+            "11": 34
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/home/xavier/work-random/programming/dotnet/NetCore-ColorRest/colorsRest/Migrations/20180720061754_InitialCreate.cs": {
+      "colorsRest.Migrations.InitialCreate": {
+        "System.Void colorsRest.Migrations.InitialCreate::Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)": {
+          "Lines": {
+            "8": 0,
+            "9": 0,
+            "10": 0,
+            "11": 0,
+            "12": 0,
+            "13": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0,
+            "17": 0,
+            "18": 0,
+            "19": 0,
+            "20": 0,
+            "21": 0,
+            "22": 0
+          },
+          "Branches": [
+            {
+              "Line": 9,
+              "Offset": 13,
+              "EndOffset": 15,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 9,
+              "Offset": 13,
+              "EndOffset": 38,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            },
+            {
+              "Line": 9,
+              "Offset": 45,
+              "EndOffset": 47,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 0
+            },
+            {
+              "Line": 9,
+              "Offset": 45,
+              "EndOffset": 70,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 0
+            }
+          ]
+        },
+        "System.Void colorsRest.Migrations.InitialCreate::Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)": {
+          "Lines": {
+            "25": 0,
+            "26": 0,
+            "27": 0,
+            "28": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/home/xavier/work-random/programming/dotnet/NetCore-ColorRest/colorsRest/Migrations/20180720061754_InitialCreate.Designer.cs": {
+      "colorsRest.Migrations.InitialCreate": {
+        "System.Void colorsRest.Migrations.InitialCreate::BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)": {
+          "Lines": {
+            "15": 0,
+            "17": 0,
+            "18": 0,
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "23": 0,
+            "24": 0,
+            "25": 0,
+            "26": 0,
+            "27": 0,
+            "28": 0,
+            "29": 0,
+            "30": 0,
+            "31": 0,
+            "32": 0,
+            "33": 0,
+            "35": 0
+          },
+          "Branches": [
+            {
+              "Line": 20,
+              "Offset": 30,
+              "EndOffset": 32,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 20,
+              "Offset": 30,
+              "EndOffset": 55,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            }
+          ]
+        }
+      }
+    },
+    "/home/xavier/work-random/programming/dotnet/NetCore-ColorRest/colorsRest/Migrations/ColorsContextModelSnapshot.cs": {
+      "colorsRest.Migrations.ColorsContextModelSnapshot": {
+        "System.Void colorsRest.Migrations.ColorsContextModelSnapshot::BuildModel(Microsoft.EntityFrameworkCore.ModelBuilder)": {
+          "Lines": {
+            "13": 0,
+            "15": 0,
+            "16": 0,
+            "18": 0,
+            "19": 0,
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "23": 0,
+            "24": 0,
+            "25": 0,
+            "26": 0,
+            "27": 0,
+            "28": 0,
+            "29": 0,
+            "30": 0,
+            "31": 0,
+            "33": 0
+          },
+          "Branches": [
+            {
+              "Line": 18,
+              "Offset": 30,
+              "EndOffset": 32,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 18,
+              "Offset": 30,
+              "EndOffset": 55,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            }
+          ]
+        }
+      }
+    },
+    "/home/xavier/work-random/programming/dotnet/NetCore-ColorRest/colorsRest/Controllers/ColorsControllers.cs": {
+      "colorsRest.Controllers.ColorsController": {
+        "Microsoft.AspNetCore.Mvc.ActionResult`1<System.Collections.Generic.IList`1<colorsRest.Models.Color>> colorsRest.Controllers.ColorsController::GetAll()": {
+          "Lines": {
+            "31": 0,
+            "32": 0,
+            "33": 0,
+            "34": 0
+          },
+          "Branches": []
+        },
+        "Microsoft.AspNetCore.Mvc.ActionResult colorsRest.Controllers.ColorsController::Add(colorsRest.Models.Color)": {
+          "Lines": {
+            "39": 4,
+            "40": 4,
+            "41": 4,
+            "42": 2,
+            "43": 2,
+            "45": 2,
+            "46": 4
+          },
+          "Branches": [
+            {
+              "Line": 41,
+              "Offset": 17,
+              "EndOffset": 19,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 2
+            },
+            {
+              "Line": 41,
+              "Offset": 17,
+              "EndOffset": 46,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 2
+            }
+          ]
+        },
+        "Microsoft.AspNetCore.Mvc.ActionResult`1<colorsRest.Models.Color> colorsRest.Controllers.ColorsController::GetById(System.Int32)": {
+          "Lines": {
+            "51": 6,
+            "52": 6,
+            "53": 6,
+            "54": 3,
+            "55": 3,
+            "57": 3,
+            "58": 6
+          },
+          "Branches": [
+            {
+              "Line": 53,
+              "Offset": 20,
+              "EndOffset": 22,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 3
+            },
+            {
+              "Line": 53,
+              "Offset": 20,
+              "EndOffset": 37,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 3
+            }
+          ]
+        },
+        "System.Void colorsRest.Controllers.ColorsController::.ctor(colorsRest.Repository.IColorsRepository,Microsoft.Extensions.Logging.ILogger`1<colorsRest.Controllers.ColorsController>)": {
+          "Lines": {
+            "20": 17,
+            "21": 17,
+            "22": 17,
+            "23": 17,
+            "25": 17
+          },
+          "Branches": []
+        }
+      }
+    }
+  }
+}
