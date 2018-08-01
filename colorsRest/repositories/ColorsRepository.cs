@@ -41,7 +41,7 @@ namespace colorsRest.Repository
                 catch (Exception)
                 {
                     // No importa l'error que hi hagi ha de tornar false
-                };
+                }
             }
             return false;
         }

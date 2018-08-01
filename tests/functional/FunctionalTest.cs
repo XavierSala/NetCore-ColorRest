@@ -93,13 +93,13 @@ namespace colorsRest.Tests.FuncionalTests
             response.EnsureSuccessStatusCode();
             Assert.Equal("application/json; charset=utf-8",
                 response.Content.Headers.ContentType.ToString());
-
-            var json = await response.Content.ReadAsStringAsync();
-            var data = JsonConvert.DeserializeObject<Color>(json);
+            Color data = await Json2Color(response);
             Assert.Equal(expected.Id, data.Id);
             Assert.Equal(expected.Nom, data.Nom);
             Assert.Equal(expected.Rgb, data.Rgb);
         }
+
+
 
         /// Comprovar que dóna 404 quan s'intenta anar a recuperar
         /// dades que **no existeixen**
@@ -140,19 +140,16 @@ namespace colorsRest.Tests.FuncionalTests
                 Nom = nom,
                 Rgb = codi
             };
-            var content = JsonConvert.SerializeObject(colorToAdd);
-            var stringContent = new StringContent(content, Encoding.UTF8, "application/json");
 
             // When
             // var x = new FormUrlEncodedContent(formData);
-            var response = await _client.PostAsync("/api/colors", stringContent);
+            var response = await _client.PostAsync("/api/colors", Color2Json(colorToAdd));
 
             // Then
             response.EnsureSuccessStatusCode();
 
             // Comprovar que retorna l'afegit
-            var json = await response.Content.ReadAsStringAsync();
-            var data = JsonConvert.DeserializeObject<Color>(json);
+            var data = await Json2Color(response);
             Assert.NotEqual(0, data.Id);
             Assert.Equal(nom, data.Nom);
             Assert.Equal(codi, data.Rgb);
@@ -168,11 +165,9 @@ namespace colorsRest.Tests.FuncionalTests
             {
                 Rgb = "#FF00FF"
             };
-            var content = JsonConvert.SerializeObject(colorToAdd);
-            var stringContent = new StringContent(content, Encoding.UTF8, "application/json");
 
             // When
-            var response = await _client.PostAsync("/api/colors", stringContent);
+            var response = await _client.PostAsync("/api/colors", Color2Json(colorToAdd));
 
             // Then
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -195,11 +190,9 @@ namespace colorsRest.Tests.FuncionalTests
             {
                 Rgb = data
             };
-            var content = JsonConvert.SerializeObject(colorToAdd);
-            var stringContent = new StringContent(content, Encoding.UTF8, "application/json");
 
             // When
-            var response = await _client.PostAsync("/api/colors", stringContent);
+            var response = await _client.PostAsync("/api/colors", Color2Json(colorToAdd));
 
             // Then
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -214,11 +207,9 @@ namespace colorsRest.Tests.FuncionalTests
         {
             // Given
             var colorToAdd = new Color();
-            var content = JsonConvert.SerializeObject(colorToAdd);
-            var stringContent = new StringContent(content, Encoding.UTF8, "application/json");
 
             // When
-            var response = await _client.PostAsync("/api/colors", stringContent);
+            var response = await _client.PostAsync("/api/colors", Color2Json(colorToAdd));
 
             // Then
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -226,6 +217,8 @@ namespace colorsRest.Tests.FuncionalTests
             responseString.Should().Contain("The Nom field is required")
                                .And.Contain("The Rgb field is required");
         }
+
+
 
 
         /// Comprovar que afegir elements inventant-se un Id dóna error
@@ -241,16 +234,29 @@ namespace colorsRest.Tests.FuncionalTests
         public async Task AddElementsShouldNotPermitIdEspcification(Color colorToAdd)
         {
             // Given
-            var content = JsonConvert.SerializeObject(colorToAdd);
-            var stringContent = new StringContent(content, Encoding.UTF8, "application/json");
 
             // When
-            var response = await _client.PostAsync("/api/colors", stringContent);
+            var response = await _client.PostAsync("/api/colors", Color2Json(colorToAdd));
 
             // Then
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
+
+
+        private static StringContent Color2Json(Color colorToAdd)
+        {
+            var content = JsonConvert.SerializeObject(colorToAdd);
+            var stringContent = new StringContent(content, Encoding.UTF8, "application/json");
+            return stringContent;
+        }
+
+        private static async Task<Color> Json2Color(HttpResponseMessage response)
+        {
+            var json = await response.Content.ReadAsStringAsync();
+            var data = JsonConvert.DeserializeObject<Color>(json);
+            return data;
+        }
 
     }
 }
