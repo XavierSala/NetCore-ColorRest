@@ -185,7 +185,7 @@ namespace colorsRest.Tests.FuncionalTests
         public async Task AddElementsShouldFailWithoutCorrectRgbCode(string data)
         {
             // Given
-            var colorToAdd = new Color()
+            var colorToAdd = new Color
             {
                 Rgb = data
             };
