@@ -41,7 +41,6 @@ namespace colorsRest.Controllers
             if (v)
             {
                 return CreatedAtAction(nameof(GetById), new { id = value.Id }, value);
-                // return Accepted();
             }
             return BadRequest();
         }

@@ -93,7 +93,7 @@ namespace colorsRest.Tests.FuncionalTests
             response.EnsureSuccessStatusCode();
             Assert.Equal("application/json; charset=utf-8",
                 response.Content.Headers.ContentType.ToString());
-            Color data = await Json2Color(response);
+            Color data = await Json2Color(response).ConfigureAwait(false);
             Assert.Equal(expected.Id, data.Id);
             Assert.Equal(expected.Nom, data.Nom);
             Assert.Equal(expected.Rgb, data.Rgb);
@@ -142,14 +142,13 @@ namespace colorsRest.Tests.FuncionalTests
             };
 
             // When
-            // var x = new FormUrlEncodedContent(formData);
             var response = await _client.PostAsync("/api/colors", Color2Json(colorToAdd));
 
             // Then
             response.EnsureSuccessStatusCode();
 
             // Comprovar que retorna l'afegit
-            var data = await Json2Color(response);
+            var data = await Json2Color(response).ConfigureAwait(false);
             Assert.NotEqual(0, data.Id);
             Assert.Equal(nom, data.Nom);
             Assert.Equal(codi, data.Rgb);
@@ -161,7 +160,7 @@ namespace colorsRest.Tests.FuncionalTests
         public async Task AddElementsShouldFailWithoutNom()
         {
             // Given
-            var colorToAdd = new Color()
+            var colorToAdd = new Color
             {
                 Rgb = "#FF00FF"
             };
