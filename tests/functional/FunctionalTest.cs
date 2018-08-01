@@ -77,9 +77,9 @@ namespace colorsRest.Tests.FuncionalTests
         public static IEnumerable<object[]> CorrectResults =>
         new List<object[]>
         {
-            new object[] { 1, new Color(){Id=1, Nom="vermell", Rgb="#FF0000"} },
-            new object[] { 2, new Color(){Id=2, Nom="verd", Rgb="#00FF00" } },
-            new object[] { 3, new Color(){Id=3, Nom="negre", Rgb="#000000" } },
+            new object[] { 1, new Color {Id=1, Nom="vermell", Rgb="#FF0000"} },
+            new object[] { 2, new Color {Id=2, Nom="verd", Rgb="#00FF00" } },
+            new object[] { 3, new Color {Id=3, Nom="negre", Rgb="#000000" } },
         };
 
         [Theory]
@@ -135,7 +135,7 @@ namespace colorsRest.Tests.FuncionalTests
         public async Task AddElementsShouldWorkIfDataIsCorrect(string nom, string codi)
         {
             // Given
-            var colorToAdd = new Color()
+            var colorToAdd = new Color
             {
                 Nom = nom,
                 Rgb = codi
@@ -204,7 +204,7 @@ namespace colorsRest.Tests.FuncionalTests
             // Then
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
             var responseString = await response.Content.ReadAsStringAsync();
-            responseString.Should().Contain(Color.RGB_ERROR);
+            responseString.Should().Contain(Color.getRGBError());
         }
 
         /// Comprovar que els elements no s'afegeixen quan no hi ha res i que donen error
@@ -232,8 +232,8 @@ namespace colorsRest.Tests.FuncionalTests
         public static IEnumerable<object[]> newDuplicatedElements =>
         new List<object[]>
         {
-            new object[] {new Color(){ Id=1, Nom="fail", Rgb="#CACACA"} },
-            new object[] {new Color(){ Id=25, Nom="alsoFail", Rgb="#BACABA"} },
+            new object[] {new Color { Id=1, Nom="fail", Rgb="#CACACA"} },
+            new object[] {new Color { Id=25, Nom="alsoFail", Rgb="#BACABA"} },
         };
 
         [Theory]

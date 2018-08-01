@@ -13,11 +13,11 @@ namespace colorsRest.Tests
 
         public static List<Color> GetTestColors()
         {
-            return new List<Color>()
+            return new List<Color>
             {
-                new Color(){ Nom = "vermell", Rgb="#FF0000" },
-                new Color(){ Nom = "verd", Rgb = "#00FF00" },
-                new Color(){ Nom = "negre", Rgb = "#000000" }
+                new Color { Nom = "vermell", Rgb="#FF0000" },
+                new Color { Nom = "verd", Rgb = "#00FF00" },
+                new Color { Nom = "negre", Rgb = "#000000" }
             };
         }
     }

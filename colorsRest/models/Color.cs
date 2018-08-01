@@ -5,8 +5,12 @@ namespace colorsRest.Models
 {
     public class Color
     {
-        public const string RGB_ERROR = "Must be '#' plus a six digits hexadecimal value. Ex #CACACA";
+        private const string RGB_ERROR = "Must be '#' plus a six digits hexadecimal value. Ex #CACACA";
 
+        public static string getRGBError()
+        {
+            return RGB_ERROR;
+        }
         public int Id { get; set; }
 
         [Required]
@@ -17,4 +21,5 @@ namespace colorsRest.Models
 
         public string Rgb { get; set; }
     }
+
 }
