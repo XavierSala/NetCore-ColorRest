@@ -2,3 +2,6 @@
 bin
 obj
 Colors.db
+/.vs
+/colorsRest/colorsRest.csproj.user
+/colorsRest/Properties

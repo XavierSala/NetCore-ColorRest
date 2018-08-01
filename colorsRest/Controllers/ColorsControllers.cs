@@ -37,12 +37,17 @@ namespace colorsRest.Controllers
         [HttpPost]
         public ActionResult Add([FromBody]Color value)
         {
-            bool v = _repository.Add(value);
-            if (v)
+
+            try
             {
+                _repository.Add(value);
                 return CreatedAtAction(nameof(GetById), new { id = value.Id }, value);
             }
-            return BadRequest();
+            catch (ApplicationException e)
+            {
+                return BadRequest(new { message = e.Message });
+            }
+            
         }
 
         // GET api/colors/5
@@ -52,7 +57,7 @@ namespace colorsRest.Controllers
             var resultat = _repository.Get(id);
             if (resultat == null)
             {
-                return NotFound();
+                return NotFound(new { message = "Not Found" });
             }
             return resultat;
         }

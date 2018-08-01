@@ -27,23 +27,22 @@ namespace colorsRest.Repository
             _context.SaveChanges();
         }
 
-        public bool Add(Color item)
+        public void Add(Color item)
         {
-            if (item.Id == 0)
+            if (item.Id != 0)
             {
-                try
-                {
-                    _context.Colors.Add(item);
-                    _context.SaveChanges();
-                    return true;
-
-                }
-                catch (Exception)
-                {
-                    // No importa l'error que hi hagi ha de tornar false
-                }
+                throw new ApplicationException("You can't give an Id");
             }
-            return false;
+            
+            try
+            {
+                _context.Colors.Add(item);
+                _context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException(e.Message);
+            }                       
         }
 
         public async Task<int> AddProductAsync(Color item)

@@ -11,7 +11,7 @@ namespace colorsRest.Repository
     {
         Color Get(int id);
         IList<Color> Get();
-        bool Add(Color item);
+        void Add(Color item);
         Task<int> AddProductAsync(Color item);
         void Update(Color item);
         void Delete(int id);

@@ -120,6 +120,8 @@ namespace colorsRest.Tests.FuncionalTests
 
             // Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            var responseString = await response.Content.ReadAsStringAsync();
+            responseString.Should().Contain("Not Found");
         }
 
         /// Comprovar que els elements s'afegeixen bé

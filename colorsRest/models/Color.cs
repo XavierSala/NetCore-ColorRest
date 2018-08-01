@@ -18,7 +18,6 @@ namespace colorsRest.Models
 
         [Required]
         [RegularExpression(@"^#[0-9A-Fa-f]{6}$", ErrorMessage = RGB_ERROR)]
-
         public string Rgb { get; set; }
     }
 
