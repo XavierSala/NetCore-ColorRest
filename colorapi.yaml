@@ -1,0 +1,112 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Colors API
+  license:
+    name: MIT
+servers:
+  - url: http://localhost:5000
+paths:
+  /api/colors:
+    get:
+      summary: Llista tots els colors
+      operationId: Get
+      tags:
+        - colors
+      responses:
+        200:
+          description: Llista de tots els colors
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Colors"
+              example:
+                - Id: 1
+                  Nom: "vermell"
+                  Rgb: "#FF0000"
+                - Id: 2
+                  Nom: "blau"
+                  Rgb: "#0000FF"
+    post:
+      summary: Crea un color
+      operationId: Add
+      tags:
+        - colors
+      requestBody:
+        description: Color a afegir
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ColorNew'
+            example:
+              Nom: "vermell"
+              Rgb: "#FF0000"
+      responses:
+        201:
+          description: Creat el color
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Color'
+              example:
+                Id: 3
+                Nom: "vermell"
+                Rgb: "#FF0000"
+        401:
+          description: Bad Request
+
+  /api/colors/{Id}:
+    get:
+      summary: Obtenir les dades d'un Color
+      operationId: GetById
+      tags:
+        - colors
+      parameters:
+        - name: Id
+          in: path
+          required: true
+          description: L'Id del color a recuperar
+          schema:
+            type: string
+      responses:
+        200:
+          description: Retorna un color vàlid
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Color"
+              example:
+                Id: 2
+                Nom: "negre"
+                Rgb: "#000000"
+        404:
+          description: Not Found
+components:
+  schemas:
+    Color:
+      required:
+        - id
+        - Nom
+        - Rgb
+      properties:
+        Id:
+          type: integer
+          format: int64
+        Nom:
+          type: string
+        Rgb:
+          type: string
+    ColorNew:
+      required:
+        - Nom
+        - Rgb
+      properties:
+        Nom:
+          type: string
+        Rgb:
+          type: string
+    Colors:
+      type: array
+      items:
+        $ref: "#/components/schemas/Color"
