@@ -47,19 +47,18 @@ namespace colorsRest.Controllers
             {
                 return BadRequest(new { message = e.Message });
             }
-            
         }
 
         // GET api/colors/5
         [HttpGet("{id}", Name = "GetColor")]
-        public ActionResult<Color> GetById(int id)
+        public IActionResult GetById(int id)
         {
             var resultat = _repository.Get(id);
             if (resultat == null)
             {
                 return NotFound(new { message = "Not Found" });
             }
-            return resultat;
+            return Ok(resultat);
         }
 
     }
