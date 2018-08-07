@@ -33,7 +33,6 @@ namespace colorsRest.Repository
             {
                 throw new ApplicationException("You can't give an Id");
             }
-            
             try
             {
                 _context.Colors.Add(item);
@@ -42,7 +41,7 @@ namespace colorsRest.Repository
             catch (Exception e)
             {
                 throw new ApplicationException(e.Message);
-            }                       
+            }
         }
 
         public async Task<int> AddProductAsync(Color item)
@@ -68,5 +67,6 @@ namespace colorsRest.Repository
         {
             throw new NotImplementedException();
         }
+
     }
 }

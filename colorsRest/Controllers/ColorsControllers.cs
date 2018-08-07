@@ -37,6 +37,10 @@ namespace colorsRest.Controllers
         [HttpPost]
         public ActionResult Add([FromBody]Color value)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
             try
             {
