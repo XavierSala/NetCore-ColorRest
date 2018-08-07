@@ -14,7 +14,6 @@ namespace colorsRest
     {
         public static void Main(string[] args)
         {
-            // BuildWebHost(args).Run();
             var host = CreateWebHostBuilder(args).Build();
             host.Run();
         }

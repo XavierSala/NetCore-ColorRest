@@ -28,13 +28,10 @@ namespace colorsRest
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ColorsContext>(opt =>
-                // opt.UseInMemoryDatabase("colors"));
                 opt.UseSqlite(Configuration.GetConnectionString("Sqlite"))
             );
 
             services.AddMvc();
-            //            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
             services.AddScoped<IColorsRepository, ColorsRepository>();
         }
 

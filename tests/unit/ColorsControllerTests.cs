@@ -17,13 +17,12 @@ namespace colorsRest.Tests.UnitTests
 {
     public class ColorsControllerTests
     {
-        ILogger<ColorsController> _mockLogger;
-        Mock<IColorsRepository> _mockRepo;
-        ColorsController _controller;
+        readonly Mock<IColorsRepository> _mockRepo;
+        readonly ColorsController _controller;
 
         public ColorsControllerTests()
         {
-            _mockLogger = new Mock<ILogger<ColorsController>>().Object;
+            ILogger<ColorsController> _mockLogger = new Mock<ILogger<ColorsController>>().Object;
             _mockRepo = new Mock<IColorsRepository>();
             _controller = new ColorsController(_mockRepo.Object, _mockLogger);
         }
@@ -31,21 +30,21 @@ namespace colorsRest.Tests.UnitTests
         private List<Color> GetTestColors()
         {
             var colors = new List<Color>();
-            colors.Add(new Color()
+            colors.Add(new Color
             {
                 Nom = "vermell",
                 Id = 1,
                 Rgb = "#FF0000"
             });
 
-            colors.Add(new Color()
+            colors.Add(new Color
             {
                 Nom = "verd",
                 Id = 1,
                 Rgb = "#00FF00"
             });
 
-            colors.Add(new Color()
+            colors.Add(new Color
             {
                 Nom = "beix",
                 Id = 3,
@@ -90,7 +89,6 @@ namespace colorsRest.Tests.UnitTests
             var item = okObjectResult.Value as Color;
             Assert.NotNull(item);
 
-            // Assert.IsType<Color>(item);
             item.Should().Equals(expected);
         }
 
@@ -100,7 +98,6 @@ namespace colorsRest.Tests.UnitTests
         public void TestIfGetByIdReturnsNotFoundInexistentColor(int element)
         {
             // Given
-            var expected = GetTestColors()[0];
             Color noResult = null;
 
             _mockRepo.Setup(repo => repo.Get(element)).Returns(noResult);
