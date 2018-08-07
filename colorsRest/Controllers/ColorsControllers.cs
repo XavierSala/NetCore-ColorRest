@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using colorsRest.Models;
 using colorsRest.Repository;
+using colorsRest.Exceptions;
 
 namespace colorsRest.Controllers
 {
@@ -47,7 +48,7 @@ namespace colorsRest.Controllers
                 _repository.Add(value);
                 return CreatedAtAction(nameof(GetById), new { id = value.Id }, value);
             }
-            catch (ApplicationException e)
+            catch (ColorException e)
             {
                 return BadRequest(new { message = e.Message });
             }

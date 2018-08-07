@@ -2,8 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
-
+using colorsRest.Exceptions;
 using colorsRest.Models;
 
 namespace colorsRest.Repository
@@ -31,7 +30,7 @@ namespace colorsRest.Repository
         {
             if (item.Id != 0)
             {
-                throw new ApplicationException("You can't give an Id");
+                throw new ColorException("You can't give an Id");
             }
             try
             {
@@ -40,7 +39,7 @@ namespace colorsRest.Repository
             }
             catch (Exception e)
             {
-                throw new ApplicationException(e.Message);
+                throw new ColorException(e.Message);
             }
         }
 

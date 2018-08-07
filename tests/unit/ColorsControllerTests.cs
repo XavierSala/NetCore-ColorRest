@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using Xunit;
 using FluentAssertions;
 using System.Net;
+using colorsRest.Exceptions;
 
 namespace colorsRest.Tests.UnitTests
 {
@@ -27,7 +28,7 @@ namespace colorsRest.Tests.UnitTests
             _controller = new ColorsController(_mockRepo.Object, _mockLogger);
         }
 
-        private List<Color> GetTestColors()
+        private static List<Color> GetTestColors()
         {
             var colors = new List<Color>();
             colors.Add(new Color
@@ -175,7 +176,7 @@ namespace colorsRest.Tests.UnitTests
         {
             // Given
             Color colorToAdd = GetTestColors()[0];
-            _mockRepo.Setup(repo => repo.Add(colorToAdd)).Throws(new ApplicationException("You can't give an Id"));
+            _mockRepo.Setup(repo => repo.Add(colorToAdd)).Throws(new ColorException("You can't give an Id"));
 
 
             // When
@@ -190,7 +191,8 @@ namespace colorsRest.Tests.UnitTests
         {
             // Given
             Color colorToAdd = GetTestColors()[0];
-            _mockRepo.Setup(repo => repo.Add(colorToAdd)).Throws(new ApplicationException("You can't give an Id"));
+            var expectedMessage = "You can't give an Id";
+            _mockRepo.Setup(repo => repo.Add(colorToAdd)).Throws(new ColorException(expectedMessage));
 
             // When
             var badResponse = _controller.Add(colorToAdd) as BadRequestObjectResult;
@@ -199,7 +201,7 @@ namespace colorsRest.Tests.UnitTests
             Assert.IsType<BadRequestObjectResult>(badResponse);
             var content = badResponse.Value;
             var message = content.GetType().GetProperty("message").GetValue(content, null) as string;
-            Assert.Equal("You can't give an Id", message);
+            Assert.Equal(expectedMessage, message);
         }
     }
 
