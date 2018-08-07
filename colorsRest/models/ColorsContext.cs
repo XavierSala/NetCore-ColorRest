@@ -9,11 +9,6 @@ namespace colorsRest.Models
         {
             
         }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlite("Data Source=Colors.db");
-        }
         
         public DbSet<Color> Colors { get; set; }
     }
