@@ -41,7 +41,7 @@ namespace colorsRest.Tests.UnitTests
             colors.Add(new Color
             {
                 Nom = "verd",
-                Id = 1,
+                Id = 2,
                 Rgb = "#00FF00"
             });
 
@@ -100,7 +100,6 @@ namespace colorsRest.Tests.UnitTests
         {
             // Given
             Color noResult = null;
-
             _mockRepo.Setup(repo => repo.Get(element)).Returns(noResult);
 
             // When
@@ -202,6 +201,36 @@ namespace colorsRest.Tests.UnitTests
             var content = badResponse.Value;
             var message = content.GetType().GetProperty("message").GetValue(content, null) as string;
             Assert.Equal(expectedMessage, message);
+        }
+
+        [Fact]
+        public async Task TestIfDeleteByWithCorrectIdReturnsOk()
+        {
+            // Given
+            int idToDelete = 1;
+            _mockRepo.Setup(repo => repo.Delete(idToDelete)).Returns(Task.FromResult(true));
+
+            // When
+            var result = await _controller.DeleteById(idToDelete);
+
+            // Then
+            var theresult = result as OkResult;
+            Assert.NotNull(theresult);
+        }
+
+        [Fact]
+        public async Task TestIfDeleteByWithInexistentIdReturnsOk()
+        {
+            // Given
+            int idToDelete = 99999;
+            _mockRepo.Setup(repo => repo.Delete(idToDelete)).Returns(Task.FromResult(false));
+
+            // When
+            var result = await _controller.DeleteById(idToDelete);
+
+            // Then
+            var theresult = result as NoContentResult;
+            Assert.NotNull(theresult);
         }
     }
 

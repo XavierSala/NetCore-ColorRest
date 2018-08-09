@@ -12,9 +12,9 @@ namespace colorsRest.Repository
         Color Get(int id);
         IList<Color> Get();
         void Add(Color item);
-        Task<int> AddProductAsync(Color item);
+        Task<int> AddColorAsync(Color item);
         void Update(Color item);
-        void Delete(int id);
+        Task<bool> Delete(int id);
     }
 
 }

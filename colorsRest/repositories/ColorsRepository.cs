@@ -43,7 +43,7 @@ namespace colorsRest.Repository
             }
         }
 
-        public async Task<int> AddProductAsync(Color item)
+        public async Task<int> AddColorAsync(Color item)
         {
             int rowsAffected = 0;
 
@@ -53,9 +53,19 @@ namespace colorsRest.Repository
             return rowsAffected;
         }
 
-        public void Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            throw new NotImplementedException();
+            // Search
+            Color colorToDelete = await _context.Colors.FindAsync(id);
+            if (colorToDelete == null)
+            {
+                return false;
+            }
+
+            // Delete from database and return true/false.
+            _context.Colors.Remove(colorToDelete);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public Color Get(int id) => _context.Colors.Find(id);

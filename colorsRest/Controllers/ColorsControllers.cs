@@ -36,7 +36,7 @@ namespace colorsRest.Controllers
 
         // POST api/colors
         [HttpPost]
-        public ActionResult Add([FromBody]Color value)
+        public IActionResult Add([FromBody]Color value)
         {
             if (!ModelState.IsValid)
             {
@@ -64,6 +64,15 @@ namespace colorsRest.Controllers
                 return NotFound(new { message = "Not Found" });
             }
             return Ok(resultat);
+        }
+
+        // DELETE api/colors/5
+        [HttpDelete("{id}", Name = "DeleteColor")]
+        public async Task<IActionResult> DeleteById(int id)
+        {
+            return (await _repository.Delete(id))
+                        ? (IActionResult)Ok()
+                        : NoContent();
         }
 
     }
