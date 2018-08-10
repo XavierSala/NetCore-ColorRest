@@ -4,12 +4,13 @@ namespace colorsRest.Models
 {
     public class ColorsContext : DbContext
     {
+        public ColorsContext() { }
         public ColorsContext(DbContextOptions<ColorsContext> options)
             : base(options)
         {
-            
+
         }
-        
-        public DbSet<Color> Colors { get; set; }
+
+        public virtual DbSet<Color> Colors { get; set; }
     }
 }
