@@ -69,7 +69,29 @@ namespace colorsRest.Tests.UnitTests
 
             // Then: Ha de tornar tots els colors
             Assert.Equal(dades.Count, actual.Count());
+            // El primer és ...
             Assert.Equal(dades[0].Nom, actual.First().Nom);
+        }
+
+        [Fact]
+        public void TestIfGetColorByIdWorksOk()
+        {
+            // Given
+            var dades = getDefaultData();
+            var colorsMock = CreateDbSetMock(dades);
+            var colorsContextMock = new Mock<ColorsContext>();
+            colorsContextMock.Setup(x => x.Colors).Returns(colorsMock.Object);
+            var id = 0;
+            var expected = dades[id];
+
+            // When
+            var repository = new ColorsRepository(colorsContextMock.Object);
+            var actual = repository.Get(id);
+
+            // Then: Ha de tornar tots els colors
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.Nom, actual.Nom);
+            Assert.Equal(expected.Rgb, actual.Rgb);
         }
 
     }
