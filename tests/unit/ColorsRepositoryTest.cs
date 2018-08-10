@@ -78,11 +78,13 @@ namespace colorsRest.Tests.UnitTests
         {
             // Given
             var dades = getDefaultData();
+            var id = 0;
+            var expected = dades[id];
+
             var colorsMock = CreateDbSetMock(dades);
             var colorsContextMock = new Mock<ColorsContext>();
             colorsContextMock.Setup(x => x.Colors).Returns(colorsMock.Object);
-            var id = 0;
-            var expected = dades[id];
+            colorsContextMock.Setup(x => x.Colors.Find(id)).Returns(dades[id]);
 
             // When
             var repository = new ColorsRepository(colorsContextMock.Object);
@@ -92,6 +94,32 @@ namespace colorsRest.Tests.UnitTests
             Assert.Equal(expected.Id, actual.Id);
             Assert.Equal(expected.Nom, actual.Nom);
             Assert.Equal(expected.Rgb, actual.Rgb);
+        }
+
+
+        [Fact]
+        public void TestIfCreateColorIfItIsCorrect()
+        {
+            // Given
+            var nouColor = new Color
+            {
+                Id = 0,
+                Nom = "Beix",
+                Rgb = "#FAFADF"
+            };
+
+            var colorsSetMock = CreateDbSetMock(getDefaultData());
+            var colorsContextMock = new Mock<ColorsContext>();
+            colorsContextMock.Setup(x => x.Colors).Returns(colorsSetMock.Object);
+
+            // When - Add the color
+            var repository = new ColorsRepository(colorsContextMock.Object);
+            repository.Add(nouColor);
+
+            Assert.NotNull(colorsContextMock);
+            // Then - Verifies the color is added once and saved.
+            colorsSetMock.Verify(m => m.Add(It.IsAny<Color>()), Times.Once);
+            colorsContextMock.Verify(m => m.SaveChanges(), Times.Exactly(1));
         }
 
     }

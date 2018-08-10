@@ -16,14 +16,14 @@ namespace colorsRest.Repository
         {
             _context = context;
 
-            if (_context.Colors.Count() != 0)
-            {
-                return;
-            }
-            _context.Colors.Add(new Color { Nom = "vermell", Rgb = "#FF0000" });
-            _context.Colors.Add(new Color { Nom = "verd", Rgb = "#00FF00" });
-            _context.Colors.Add(new Color { Nom = "blau", Rgb = "#0000FF" });
-            _context.SaveChanges();
+            // if (_context.Colors.Count() != 0)
+            // {
+            //     return;
+            // }
+            // _context.Colors.Add(new Color { Nom = "vermell", Rgb = "#FF0000" });
+            // _context.Colors.Add(new Color { Nom = "verd", Rgb = "#00FF00" });
+            // _context.Colors.Add(new Color { Nom = "blau", Rgb = "#0000FF" });
+            // _context.SaveChanges();
         }
 
         public void Add(Color item)
