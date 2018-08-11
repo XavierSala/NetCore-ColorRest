@@ -5,3 +5,4 @@ Colors.db
 /.vs
 /colorsRest/colorsRest.csproj.user
 /colorsRest/Properties
+.idea

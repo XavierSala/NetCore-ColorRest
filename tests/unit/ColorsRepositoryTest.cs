@@ -1,44 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using colorsRest.Controllers;
 using colorsRest.Models;
 using colorsRest.Repository;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Moq;
-using Newtonsoft.Json;
 using Xunit;
-using FluentAssertions;
-using System.Net;
-using colorsRest.Exceptions;
+
 
 namespace colorsRest.Tests.UnitTests
 {
     public class ColorsRepositoryTests
     {
-
-        private List<Color> getDefaultData()
-        {
-            return new List<Color>
-            {
-                new Color
-                {
-                    Id = 1,
-                    Nom = "vermell",
-                    Rgb = "#FF0000"
-                },
-                new Color
-                {
-                    Id = 2,
-                    Nom = "blau",
-                    Rgb = "#0000FF"
-                }
-
-            };
-        }
 
         private static Mock<DbSet<T>> CreateDbSetMock<T>(IEnumerable<T> elements) where T : class
         {
@@ -58,7 +31,7 @@ namespace colorsRest.Tests.UnitTests
         public void UnnecessariTestForGetAllColors()
         {
             // Given
-            var dades = getDefaultData();
+            var dades = Helper.TestColors;
             var colorsMock = CreateDbSetMock(dades);
             var colorsContextMock = new Mock<ColorsContext>();
             colorsContextMock.Setup(x => x.Colors).Returns(colorsMock.Object);
@@ -68,7 +41,7 @@ namespace colorsRest.Tests.UnitTests
             var actual = repository.Get();
 
             // Then: Ha de tornar tots els colors
-            Assert.Equal(dades.Count, actual.Count());
+            Assert.Equal(dades.Count, actual.Count);
             // El primer és ...
             Assert.Equal(dades[0].Nom, actual.First().Nom);
         }
@@ -77,7 +50,7 @@ namespace colorsRest.Tests.UnitTests
         public void TestIfGetColorByIdWorksOk()
         {
             // Given
-            var dades = getDefaultData();
+            var dades = Helper.TestColors;
             var id = 0;
             var expected = dades[id];
 
@@ -108,7 +81,7 @@ namespace colorsRest.Tests.UnitTests
                 Rgb = "#FAFADF"
             };
 
-            var colorsSetMock = CreateDbSetMock(getDefaultData());
+            var colorsSetMock = CreateDbSetMock(Helper.TestColors);
             var colorsContextMock = new Mock<ColorsContext>();
             colorsContextMock.Setup(x => x.Colors).Returns(colorsSetMock.Object);
 

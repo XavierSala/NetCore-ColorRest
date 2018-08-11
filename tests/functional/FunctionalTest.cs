@@ -13,16 +13,15 @@ using System.Text;
 using FluentAssertions;
 
 using colorsRest.Models;
-using colorsRest.Controllers;
 
 namespace colorsRest.Tests.FuncionalTests
 {
-    public class ColorRestTests : IClassFixture<WebApplicationFactory<colorsRest.Startup>>
+    public class ColorRestTests : IClassFixture<WebApplicationFactory<Startup>>
     {
         private readonly HttpClient _client;
 
         public ColorRestTests(
-            WebApplicationFactory<colorsRest.Startup> webAppFactory)
+            WebApplicationFactory<Startup> webAppFactory)
         {
             var testWebAppFactory = webAppFactory.WithWebHostBuilder(builder =>
             {
@@ -61,7 +60,7 @@ namespace colorsRest.Tests.FuncionalTests
                         }
                         catch (Exception ex)
                         {
-                            logger.LogError(ex, $"An error occurred seeding the " +
+                            logger.LogError(ex, "An error occurred seeding the " +
                                 "database with colors. Error: {ex.Color}");
                         }
                     }
@@ -125,7 +124,7 @@ namespace colorsRest.Tests.FuncionalTests
         }
 
         /// Comprovar que els elements s'afegeixen bé
-        public static IEnumerable<object[]> newCorrectElements =>
+        public static IEnumerable<object[]> NewCorrectElements =>
         new List<object[]>
         {
             new object[] {"blanc", "#FFFFFF" },
@@ -133,7 +132,7 @@ namespace colorsRest.Tests.FuncionalTests
         };
 
         [Theory]
-        [MemberData(nameof(newCorrectElements))]
+        [MemberData(nameof(NewCorrectElements))]
         public async Task AddElementsShouldWorkIfDataIsCorrect(string nom, string codi)
         {
             // Given
@@ -223,7 +222,7 @@ namespace colorsRest.Tests.FuncionalTests
 
 
         /// Comprovar que afegir elements inventant-se un Id dóna error
-        public static IEnumerable<object[]> newDuplicatedElements =>
+        public static IEnumerable<object[]> NewDuplicatedElements =>
         new List<object[]>
         {
             new object[] {new Color { Id=1, Nom="fail", Rgb="#CACACA"} },
@@ -231,7 +230,7 @@ namespace colorsRest.Tests.FuncionalTests
         };
 
         [Theory]
-        [MemberData(nameof(newDuplicatedElements))]
+        [MemberData(nameof(NewDuplicatedElements))]
         public async Task AddElementsShouldNotPermitIdEspcification(Color colorToAdd)
         {
             // Given

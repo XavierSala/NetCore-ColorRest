@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using colorsRest.Controllers;
 using colorsRest.Models;
@@ -8,7 +6,6 @@ using colorsRest.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Newtonsoft.Json;
 using Xunit;
 using FluentAssertions;
 using System.Net;
@@ -28,47 +25,22 @@ namespace colorsRest.Tests.UnitTests
             _controller = new ColorsController(_mockRepo.Object, _mockLogger);
         }
 
-        private static List<Color> GetTestColors()
-        {
-            var colors = new List<Color>();
-            colors.Add(new Color
-            {
-                Nom = "vermell",
-                Id = 1,
-                Rgb = "#FF0000"
-            });
-
-            colors.Add(new Color
-            {
-                Nom = "verd",
-                Id = 2,
-                Rgb = "#00FF00"
-            });
-
-            colors.Add(new Color
-            {
-                Nom = "beix",
-                Id = 3,
-                Rgb = "#F2F2DF"
-            });
-
-            return colors;
-        }
-
         [Fact]
         public void TestIfGetAllReturnsAllColors()
         {
             // Given
-            var expectedItems = GetTestColors().Count;
-            _mockRepo.Setup(repo => repo.Get()).Returns((GetTestColors()));
+            var expectedItems = Helper.TestColors;
+            var expectedItemsCount = expectedItems.Count;
+            _mockRepo.Setup(repo => repo.Get()).Returns((expectedItems));
 
             // When
             var result = _controller.GetAll();
 
             // Then
             var items = Assert.IsType<JsonResult>(result.Result).Value as List<Color>;
-            Assert.Equal(expectedItems, items.Count);
-            items.Should().HaveCount(expectedItems).And.BeEquivalentTo(GetTestColors());
+            Assert.NotNull(items);
+            Assert.Equal(expectedItemsCount, items.Count);
+            items.Should().HaveCount(expectedItemsCount).And.BeEquivalentTo(expectedItems);
         }
 
         [Theory]
@@ -77,7 +49,7 @@ namespace colorsRest.Tests.UnitTests
         public void TestIfGetByIdReturnsElementRequested(int element)
         {
             // Given
-            var expected = GetTestColors()[0];
+            var expected = Helper.TestColors[element];
             _mockRepo.Setup(repo => repo.Get(element)).Returns((expected));
 
             // When
@@ -99,8 +71,7 @@ namespace colorsRest.Tests.UnitTests
         public void TestIfGetByIdReturnsNotFoundInexistentColor(int element)
         {
             // Given
-            Color noResult = null;
-            _mockRepo.Setup(repo => repo.Get(element)).Returns(noResult);
+            _mockRepo.Setup(repo => repo.Get(element)).Returns((Color)null);
 
             // When
             var result = _controller.GetById(element);
@@ -121,9 +92,8 @@ namespace colorsRest.Tests.UnitTests
         [Fact]
         public void TestIfAddCorrectColorReturnsCreatedResponse()
         {
-
             // Given
-            var expected = GetTestColors()[0];
+            var expected = Helper.TestColors[0];
             Color colorToAdd = new Color();
             colorToAdd.Nom = expected.Nom;
             colorToAdd.Rgb = expected.Rgb;
@@ -140,10 +110,11 @@ namespace colorsRest.Tests.UnitTests
         public void TestIfAddCorrectColorRetursResponseHasCreatedItem()
         {
             // Given
-            var colorToAdd = GetTestColors()[2];
+            var colorToAdd = Helper.TestColors[2];
 
             // When
             var createdResponse = _controller.Add(colorToAdd) as CreatedAtActionResult;
+            Assert.NotNull(createdResponse);
             var item = createdResponse.Value as Color;
 
             // Then
@@ -174,7 +145,7 @@ namespace colorsRest.Tests.UnitTests
         public void TestIfAddColorWithIdReturnsBadRequest()
         {
             // Given
-            Color colorToAdd = GetTestColors()[0];
+            Color colorToAdd = Helper.TestColors[0];
             _mockRepo.Setup(repo => repo.Add(colorToAdd)).Throws(new ColorException("You can't give an Id"));
 
 
@@ -189,7 +160,7 @@ namespace colorsRest.Tests.UnitTests
         public void TestIfAddColorWithIdReturnsBadRequestText()
         {
             // Given
-            Color colorToAdd = GetTestColors()[0];
+            Color colorToAdd = Helper.TestColors[0];
             var expectedMessage = "You can't give an Id";
             _mockRepo.Setup(repo => repo.Add(colorToAdd)).Throws(new ColorException(expectedMessage));
 
