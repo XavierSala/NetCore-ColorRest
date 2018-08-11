@@ -6,6 +6,9 @@ namespace colorsRest.Tests.UnitTests
 {
     public class Helper
     {
+        protected Helper()
+        {
+        }
         public static List<Color> TestColors
         {
             get

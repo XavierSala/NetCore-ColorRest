@@ -13,6 +13,16 @@ namespace colorsRest.Tests.UnitTests
     public class ColorsRepositoryTests
     {
 
+        private Mock<ColorsContext> colorsContextMock;
+        private Mock<DbSet<Color>> colorsSetMock;
+        public ColorsRepositoryTests()
+        {
+            var dades = Helper.TestColors;
+            colorsSetMock = CreateDbSetMock(dades);
+            colorsContextMock = new Mock<ColorsContext>();
+            colorsContextMock.Setup(x => x.Colors).Returns(colorsSetMock.Object as DbSet<Color>);
+        }
+
         private static Mock<DbSet<T>> CreateDbSetMock<T>(IEnumerable<T> elements) where T : class
         {
             var elementsAsQueryable = elements.AsQueryable();
@@ -26,15 +36,11 @@ namespace colorsRest.Tests.UnitTests
             return dbSetMock;
         }
 
-
         [Fact]
         public void UnnecessariTestForGetAllColors()
         {
             // Given
             var dades = Helper.TestColors;
-            var colorsMock = CreateDbSetMock(dades);
-            var colorsContextMock = new Mock<ColorsContext>();
-            colorsContextMock.Setup(x => x.Colors).Returns(colorsMock.Object);
 
             // When
             var repository = new ColorsRepository(colorsContextMock.Object);
@@ -50,14 +56,10 @@ namespace colorsRest.Tests.UnitTests
         public void TestIfGetColorByIdWorksOk()
         {
             // Given
-            var dades = Helper.TestColors;
-            var id = 0;
-            var expected = dades[id];
+            int id = 1;
+            var expected = Helper.TestColors[id];
 
-            var colorsMock = CreateDbSetMock(dades);
-            var colorsContextMock = new Mock<ColorsContext>();
-            colorsContextMock.Setup(x => x.Colors).Returns(colorsMock.Object);
-            colorsContextMock.Setup(x => x.Colors.Find(id)).Returns(dades[id]);
+            colorsContextMock.Setup(x => x.Colors.Find(id)).Returns(expected);
 
             // When
             var repository = new ColorsRepository(colorsContextMock.Object);
@@ -80,10 +82,6 @@ namespace colorsRest.Tests.UnitTests
                 Nom = "Beix",
                 Rgb = "#FAFADF"
             };
-
-            var colorsSetMock = CreateDbSetMock(Helper.TestColors);
-            var colorsContextMock = new Mock<ColorsContext>();
-            colorsContextMock.Setup(x => x.Colors).Returns(colorsSetMock.Object);
 
             // When - Add the color
             var repository = new ColorsRepository(colorsContextMock.Object);
