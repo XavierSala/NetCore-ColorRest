@@ -32,6 +32,7 @@ namespace colorsRest
             );
 
             services.AddMvc();
+            services.AddCors();
             services.AddScoped<IColorsRepository, ColorsRepository>();
         }
 
@@ -39,6 +40,13 @@ namespace colorsRest
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+
+            // Amb WithOrigins es pot limitar qui pot fer les peticions
+            app.UseCors(builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod();
+            });
 
             if (env.IsDevelopment())
             {
