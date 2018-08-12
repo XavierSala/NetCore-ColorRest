@@ -15,6 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 namespace colorsRest.Controllers
 {
     [Route("/api/[controller]/[action]")]
+    [ApiController]
     public class UserController : Controller
     {
         private readonly SignInManager<IdentityUser> _signInManager;
@@ -33,21 +34,25 @@ namespace colorsRest.Controllers
         }
 
         [HttpPost]
-        public async Task<object> Login([FromBody] LoginDto model)
+        public async Task<IActionResult> Login([FromBody] LoginDto model)
         {
             var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
 
             if (result.Succeeded)
             {
                 var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
-                return await GenerateJwtToken(model.Email, appUser);
+                return Ok(
+                    new
+                    {
+                        token = await GenerateJwtToken(model.Email, appUser)
+                    });
             }
 
-            throw new ApplicationException("INVALID_LOGIN_ATTEMPT");
+            return BadRequest(new { message = "Invalid Login" });
         }
 
         [HttpPost]
-        public async Task<object> Register([FromBody] RegisterDto model)
+        public async Task<IActionResult> Register([FromBody] RegisterDto model)
         {
             var user = new IdentityUser
             {
@@ -59,10 +64,14 @@ namespace colorsRest.Controllers
             if (result.Succeeded)
             {
                 await _signInManager.SignInAsync(user, false);
-                return await GenerateJwtToken(model.Email, user);
+                return Ok(
+                    new
+                    {
+                        token = await GenerateJwtToken(model.Email, user)
+                    });
             }
 
-            throw new ApplicationException("UNKNOWN_ERROR");
+            return BadRequest(new { message = "Unexpected error" });
         }
 
         private async Task<object> GenerateJwtToken(string email, IdentityUser user)
