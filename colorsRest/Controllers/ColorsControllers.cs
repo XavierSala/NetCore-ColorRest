@@ -54,11 +54,23 @@ namespace colorsRest.Controllers
             }
         }
 
-        // GET api/colors/5
-        [HttpGet("{id}", Name = "GetColor")]
+        // GET api/colors/id/5
+        [HttpGet("{id:int}", Name = "GetColor")]
         public IActionResult GetById(int id)
         {
             var resultat = _repository.Get(id);
+            if (resultat == null)
+            {
+                return NotFound(new { message = "Not Found" });
+            }
+            return Ok(resultat);
+        }
+
+        // GET /api/colors/vermell
+        [HttpGet("{nom}", Name = "GetColorByName")]
+        public async Task<IActionResult> GetByName(string nom)
+        {
+            var resultat = await _repository.Get(nom);
             if (resultat == null)
             {
                 return NotFound(new { message = "Not Found" });

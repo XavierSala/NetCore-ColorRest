@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using colorsRest.Exceptions;
 using colorsRest.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace colorsRest.Repository
 {
@@ -57,6 +58,13 @@ namespace colorsRest.Repository
             _context.Colors.Remove(colorToDelete);
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<Color> Get(string nom)
+        {
+            return await _context.Colors
+                    .Where(b => b.Nom.Equals(nom))
+                    .FirstOrDefaultAsync();
         }
 
         public Color Get(int id) => _context.Colors.Find(id);
