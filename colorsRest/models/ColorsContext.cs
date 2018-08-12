@@ -1,8 +1,9 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace colorsRest.Models
 {
-    public class ColorsContext : DbContext
+    public class ColorsContext : IdentityDbContext
     {
         public ColorsContext() { }
         public ColorsContext(DbContextOptions<ColorsContext> options)
