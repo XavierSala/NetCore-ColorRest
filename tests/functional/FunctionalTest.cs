@@ -13,12 +13,14 @@ using System.Text;
 using FluentAssertions;
 
 using colorsRest.Models;
+using System.Net.Http.Headers;
 
 namespace colorsRest.Tests.FuncionalTests
 {
     public class ColorRestTests : IClassFixture<WebApplicationFactory<Startup>>
     {
         private readonly HttpClient _client;
+        private string token;
 
         public ColorRestTests(
             WebApplicationFactory<Startup> webAppFactory)
@@ -69,6 +71,23 @@ namespace colorsRest.Tests.FuncionalTests
 
             // Crear el client per enviar les peticions al servidor
             _client = testWebAppFactory.CreateDefaultClient();
+            token = getJwtToken();
+        }
+
+        public class Token
+        {
+            public string token;
+        }
+
+        private string getJwtToken()
+        {
+            var response = _client.PostAsync("/api/user/Register",
+                                             Utilities.User2Json(
+                                             "me@localhost",
+                                             "Ies2010!"));
+            var content = response.Result.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<Token>(content.Result);
+            return result.token;
         }
 
         /// Comprovar que amb dades correctes el resultat es torna bé
@@ -92,7 +111,7 @@ namespace colorsRest.Tests.FuncionalTests
             response.EnsureSuccessStatusCode();
             Assert.Equal("application/json; charset=utf-8",
                 response.Content.Headers.ContentType.ToString());
-            Color data = await Json2Color(response).ConfigureAwait(false);
+            Color data = await Utilities.Json2Color(response).ConfigureAwait(false);
             Assert.Equal(expected.Id, data.Id);
             Assert.Equal(expected.Nom, data.Nom);
             Assert.Equal(expected.Rgb, data.Rgb);
@@ -131,6 +150,47 @@ namespace colorsRest.Tests.FuncionalTests
             new object[] {"blau", "#0000FF" }
         };
 
+
+        [Fact]
+        public async Task AddElementShouldFailWithNonAuthenticatedUsers()
+        {
+            // Given
+            var colorToAdd = new Color
+            {
+                Nom = "correcte",
+                Rgb = "#CACA00"
+            };
+
+            // When
+            var response = await _client.PostAsync("/api/colors", Utilities.Color2Json(colorToAdd));
+
+            // Then
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+
+        }
+
+        [Fact]
+        public async Task AddElementShouldFailWithInvalidToken()
+        {
+            // Given
+            var colorToAdd = new Color
+            {
+                Nom = "correcte",
+                Rgb = "#CACA00"
+            };
+
+            // When
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "ErrareHumanumEst");
+
+            var response = await _client.PostAsync("/api/colors", Utilities.Color2Json(colorToAdd));
+
+            // Then
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+
+        }
+
+
+
         [Theory]
         [MemberData(nameof(NewCorrectElements))]
         public async Task AddElementsShouldWorkIfDataIsCorrect(string nom, string codi)
@@ -143,13 +203,14 @@ namespace colorsRest.Tests.FuncionalTests
             };
 
             // When
-            var response = await _client.PostAsync("/api/colors", Color2Json(colorToAdd));
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var response = await _client.PostAsync("/api/colors", Utilities.Color2Json(colorToAdd));
 
             // Then
             response.EnsureSuccessStatusCode();
 
             // Comprovar que retorna l'afegit
-            var data = await Json2Color(response).ConfigureAwait(false);
+            var data = await Utilities.Json2Color(response).ConfigureAwait(false);
             Assert.NotEqual(0, data.Id);
             Assert.Equal(nom, data.Nom);
             Assert.Equal(codi, data.Rgb);
@@ -167,7 +228,8 @@ namespace colorsRest.Tests.FuncionalTests
             };
 
             // When
-            var response = await _client.PostAsync("/api/colors", Color2Json(colorToAdd));
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var response = await _client.PostAsync("/api/colors", Utilities.Color2Json(colorToAdd));
 
             // Then
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -192,7 +254,8 @@ namespace colorsRest.Tests.FuncionalTests
             };
 
             // When
-            var response = await _client.PostAsync("/api/colors", Color2Json(colorToAdd));
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var response = await _client.PostAsync("/api/colors", Utilities.Color2Json(colorToAdd));
 
             // Then
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -209,7 +272,8 @@ namespace colorsRest.Tests.FuncionalTests
             var colorToAdd = new Color();
 
             // When
-            var response = await _client.PostAsync("/api/colors", Color2Json(colorToAdd));
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var response = await _client.PostAsync("/api/colors", Utilities.Color2Json(colorToAdd));
 
             // Then
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -236,26 +300,11 @@ namespace colorsRest.Tests.FuncionalTests
             // Given
 
             // When
-            var response = await _client.PostAsync("/api/colors", Color2Json(colorToAdd));
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var response = await _client.PostAsync("/api/colors", Utilities.Color2Json(colorToAdd));
 
             // Then
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        }
-
-
-
-        private static StringContent Color2Json(Color colorToAdd)
-        {
-            var content = JsonConvert.SerializeObject(colorToAdd);
-            var stringContent = new StringContent(content, Encoding.UTF8, "application/json");
-            return stringContent;
-        }
-
-        private static async Task<Color> Json2Color(HttpResponseMessage response)
-        {
-            var json = await response.Content.ReadAsStringAsync();
-            var data = JsonConvert.DeserializeObject<Color>(json);
-            return data;
         }
 
     }
