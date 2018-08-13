@@ -32,18 +32,40 @@ Es pot provar el funcionament amb el navegador o bé Curl o Httpie:
 
 Només s'ofereixen dos punts de connexió:
 
-| URL           | Mètode | Resultat                                    |
-| ------------- | ------ | ------------------------------------------- |
-| /api/colors   | GET    | Retorna tots els colors de la base de dades |
-| /api/colors/1 | GET    | Retorna el color amb l'id especificat       |
-| /api/colors   | POST   | Afegeix el color a la BDD                   |
+| URL             | Mètode | Resultat                                    |
+| --------------- | ------ | ------------------------------------------- |
+| /api/colors     | GET    | Retorna tots els colors de la base de dades |
+| /api/colors/1   | GET    | Retorna el color amb l'id especificat       |
+| /api/colors/nom | GET    | Retorna el color amb el nom especificat     |
+| /api/colors     | POST   | Afegeix el color a la BDD                   |
+| /api/colors/1   | DELETE | Esborra el color de la BDD                  |
 
-El programa hauria de fer algunes comprovacions més, retornar errors diferents, i totes aquestes coses, però com que l'objectiu era provar els testos per ara ho deixo així
+Tant el POST com el DELETE necessiten autenticació enviant en la petició un token JWT que es pot obtenir registrant un usuari o bé fent login
+
+| URL                 | Mètode | Resultat                                                                      |
+| ------------------- | ------ | ----------------------------------------------------------------------------- |
+| /api/Users/Register | POST   | Registra un usuari que ha d'enviar Email i Password. Retorna el token         |
+| /api/Users/Login    | POST   | Permet que un usuari s'identifiqui (Email i la Contrasenya). Retorna el token |
+
+Exemple de registre d'un usuari amb Httpie: 
+
+    $ http POST http://localhost:5000/api/User/Register email=xavier@localhost Password="Alls0Seves!"
+    {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtZUBsb2Nhb...s"
+    }
+
+Després aquest token és el que servirà per poder crear i elimiar colors ... 
+
+    http  --auth-type=jwt --auth="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtZUBsb2Nhb...s" 
+          POST http://localhost:5000/api/colors Nom="beix" Rgb="#F5F5DC" -v
+
+  
+El programa hauria de fer algunes comprovacions més, retornar errors de més tipus, i totes aquestes coses, però com que l'objectiu només era provar els testos (i ara JWT) per ara ho deixo així
 
 ## Tests funcionals
 
 La idea de tot plegat era aconseguir fer els tests funcionals amb Net Core 2.1 (els unitaris són relativament semblants als de
-Java). Faig servir xunit (que sembla que és el que es porta ara).
+Java, tot i que també n'he fet algun i alguna cosa em sembla rareta). Faig servir xunit (que sembla que és el que es porta ara).
 
 L'execució és idèntica a executar un programa:
 
@@ -62,9 +84,6 @@ L'execució és idèntica a executar un programa:
     Test Run Successful.
     Test execution time: 6,1351 Seconds
 
-La idea és iniciar un servidor de proves
-i executar-hi els testos. He creat una classe a part _Helpers.cs_ per entrar les dades de prova en una base de
-dades en memòria.
+La idea és iniciar un servidor de proves i executar-hi els testos. He creat una classe a part _Helpers.cs_ per entrar les dades de prova en una base de dades en memòria.
 
-Tant els testos com el programa són senzillets però els he fet per comprovar com funciona tot plegat. Crec que si ho
-compliqués més no quedaria tant clar com es fan els testos funcionals.
+Tant els testos com el programa són senzillets però els he fet per comprovar com funciona tot plegat. 
