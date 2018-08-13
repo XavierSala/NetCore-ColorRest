@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using colorsRest.Models;
 using colorsRest.Repository;
 using colorsRest.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace colorsRest.Controllers
 {
@@ -35,6 +36,7 @@ namespace colorsRest.Controllers
         }
 
         // POST api/colors
+        [Authorize]
         [HttpPost]
         public IActionResult Add([FromBody]Color value)
         {
@@ -54,8 +56,8 @@ namespace colorsRest.Controllers
             }
         }
 
-        // GET api/colors/5
-        [HttpGet("{id}", Name = "GetColor")]
+        // GET api/colors/id/5
+        [HttpGet("{id:int}", Name = "GetColor")]
         public IActionResult GetById(int id)
         {
             var resultat = _repository.Get(id);
@@ -66,7 +68,20 @@ namespace colorsRest.Controllers
             return Ok(resultat);
         }
 
+        // GET /api/colors/vermell
+        [HttpGet("{nom}", Name = "GetColorByName")]
+        public async Task<IActionResult> GetByName(string nom)
+        {
+            var resultat = await _repository.Get(nom);
+            if (resultat == null)
+            {
+                return NotFound(new { message = "Not Found" });
+            }
+            return Ok(resultat);
+        }
+
         // DELETE api/colors/5
+        [Authorize]
         [HttpDelete("{id}", Name = "DeleteColor")]
         public async Task<IActionResult> DeleteById(int id)
         {

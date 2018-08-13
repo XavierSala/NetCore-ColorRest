@@ -10,6 +10,7 @@ namespace colorsRest.Repository
     public interface IColorsRepository
     {
         Color Get(int id);
+        Task<Color> Get(string nom);
         IList<Color> Get();
         void Add(Color item);
         Task<int> AddColorAsync(Color item);
