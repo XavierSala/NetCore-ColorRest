@@ -41,10 +41,11 @@ namespace colorsRest.Controllers
             if (result.Succeeded)
             {
                 var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
+                var token = GenerateJwtToken(model.Email, appUser);
                 return Ok(
                     new
                     {
-                        token = await GenerateJwtToken(model.Email, appUser)
+                        token = token
                     });
             }
 
@@ -64,17 +65,18 @@ namespace colorsRest.Controllers
             if (result.Succeeded)
             {
                 await _signInManager.SignInAsync(user, false);
+                var token = GenerateJwtToken(model.Email, user);
                 return Ok(
                     new
                     {
-                        token = await GenerateJwtToken(model.Email, user)
+                        token = token
                     });
             }
 
             return BadRequest(new { message = "Unexpected error" });
         }
 
-        private async Task<object> GenerateJwtToken(string email, IdentityUser user)
+        private object GenerateJwtToken(string email, IdentityUser user)
         {
             var claims = new List<Claim>
             {

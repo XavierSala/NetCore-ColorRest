@@ -11,7 +11,7 @@ namespace colorsRest.App.Pages
     {
         public void OnGet()
         {
-
+            // Retorna la pàgina estàtica
         }
     }
 }

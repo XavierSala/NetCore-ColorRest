@@ -20,7 +20,7 @@ namespace colorsRest.Tests.FuncionalTests
     public class ColorRestTests : IClassFixture<WebApplicationFactory<Startup>>
     {
         private readonly HttpClient _client;
-        private string token;
+        private readonly string token;
 
         public ColorRestTests(
             WebApplicationFactory<Startup> webAppFactory)
@@ -76,7 +76,7 @@ namespace colorsRest.Tests.FuncionalTests
 
         public class Token
         {
-            public string token;
+            public string token { get; set; }
         }
 
         private string getJwtToken()

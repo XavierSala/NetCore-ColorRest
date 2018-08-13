@@ -13,8 +13,8 @@ namespace colorsRest.Tests.UnitTests
     public class ColorsRepositoryTests
     {
 
-        private Mock<ColorsContext> colorsContextMock;
-        private Mock<DbSet<Color>> colorsSetMock;
+        private readonly Mock<ColorsContext> colorsContextMock;
+        private readonly Mock<DbSet<Color>> colorsSetMock;
         public ColorsRepositoryTests()
         {
             var dades = Helper.TestColors;
