@@ -45,7 +45,7 @@ namespace colorsRest.Controllers
                 return Ok(
                     new
                     {
-                        token = token
+                        token
                     });
             }
 
@@ -69,7 +69,7 @@ namespace colorsRest.Controllers
                 return Ok(
                     new
                     {
-                        token = token
+                        token
                     });
             }
 
