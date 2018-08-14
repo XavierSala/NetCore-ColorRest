@@ -19,6 +19,9 @@ namespace colorsRest.Tests.FuncionalTests
 {
     public class ColorRestTests : IClassFixture<WebApplicationFactory<Startup>>
     {
+        private const string DefaultUsername = "me@localhost";
+        private const string DefaultUserPassword = "Ies2010!";
+
         private readonly HttpClient _client;
         private readonly string token;
 
@@ -71,7 +74,7 @@ namespace colorsRest.Tests.FuncionalTests
 
             // Crear el client per enviar les peticions al servidor
             _client = testWebAppFactory.CreateDefaultClient();
-            token = getJwtToken();
+            token = RegisterUser(DefaultUsername, DefaultUserPassword);
         }
 
         public class Token
@@ -79,15 +82,124 @@ namespace colorsRest.Tests.FuncionalTests
             public string token { get; set; }
         }
 
-        private string getJwtToken()
+        private string RegisterUser(string email, string password)
         {
             var response = _client.PostAsync("/api/user/Register",
                                              Utilities.User2Json(
-                                             "me@localhost",
-                                             "Ies2010!"));
+                                             email,
+                                             password));
             var content = response.Result.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<Token>(content.Result);
             return result.token;
+        }
+
+
+
+        /// Comprovar que no es pot tornar a crear el mateix usuari dos cops
+        [Fact]
+        public async Task NoEsPotCrearElMateixUsuariDosCops()
+        {
+            // Given: Default user defined
+
+            // When
+            var response = await _client.PostAsync("/api/user/Register",
+                                             Utilities.User2Json(
+                                             DefaultUsername,
+                                             DefaultUserPassword));
+
+            // Then
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// Comprovar que es no es pot crear un nou usuari sense una contrasenya
+        /// que tingui números, símbols, majúscules i minúscules o si és de menys
+        /// de 6 dígits
+        [Theory]
+        [InlineData("userko1", "LesNenesMaquesAlDemati")]
+        [InlineData("userko2", "")]
+        [InlineData("userko3", "patatesfregides")]
+        [InlineData("userko4", "X1ab!")]
+        [InlineData("userko5@localhost", "Les4NenesMaques")]
+        public async Task NoEsPotCrearUnNouUsuariAlSistemaAmbMalaContrasenya(string username, string password)
+        {
+            // Given
+
+            // When
+            var response = await _client.PostAsync("/api/user/Register",
+                                             Utilities.User2Json(
+                                             username,
+                                             password));
+
+            // Then
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// Comprovar que es pot crear un nou usuari amb contrasenya correcta
+        /// Amb els caràcters correctes i 6 dígits
+        [Theory]
+        [InlineData("userok@localhost", "Les4NenesMaques!")]
+        [InlineData("userok2@localhost", "Sis6s!")]
+        public async Task EsPotCrearUnNouUsuariAlSistema(string username, string password)
+        {
+            // Given
+
+            // When
+            var response = await _client.PostAsync("/api/user/Register",
+                                             Utilities.User2Json(
+                                             username,
+                                             password));
+
+            // Then
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+
+        /// Un usuari que no existeix no pot fer login ...
+        [Fact]
+        public async Task NoEsPotFerLoginSiNoEsUnUsuariExistent()
+        {
+            // Given
+            var username = "vader";
+            var password = "ImThe4ce!";
+
+            // When
+            var response = await _client.PostAsync("/api/user/Login",
+                                             Utilities.User2Json(
+                                             username,
+                                             password)
+            );
+
+            // Then
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var responseString = await response.Content.ReadAsStringAsync();
+            responseString.Should().Contain("Invalid Login");
+        }
+
+        [Fact]
+        public async Task SiRegistresUnNouUsuariPotsFerLogin()
+        {
+            // Given un usuari que es registra
+            var username = "vader@localhost";
+            var password = "ImThe4ce!";
+
+            var response = await _client.PostAsync("/api/user/Register",
+                                             Utilities.User2Json(
+                                             username,
+                                             password)
+            );
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            // When fa Login
+            response = await _client.PostAsync("/api/user/Login",
+                                             Utilities.User2Json(
+                                             username,
+                                             password)
+            );
+
+            // Then Hauria de rebre el token
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            var responseString = await response.Content.ReadAsStringAsync();
+            responseString.Should().Contain("token");
         }
 
         /// Comprovar que amb dades correctes el resultat es torna bé
