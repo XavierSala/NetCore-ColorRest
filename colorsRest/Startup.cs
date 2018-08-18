@@ -72,7 +72,7 @@ namespace colorsRest
 
             services.AddSwaggerGen(swagger =>
             {
-                var contact = new Contact() { Name = SwaggerConfiguration.ContactName, Url = SwaggerConfiguration.ContactUrl };
+                var contact = new Contact { Name = SwaggerConfiguration.ContactName, Url = SwaggerConfiguration.ContactUrl };
                 swagger.SwaggerDoc(SwaggerConfiguration.DocNameV1,
                                    new Info
                                    {
