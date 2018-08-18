@@ -30,7 +30,7 @@ Es pot provar el funcionament amb el navegador o bé Curl o Httpie:
     Date: Mon, 30 Jul 2018 08:48:44 GMT
     Server: Kestrel
 
-Només s'ofereixen dos punts de connexió:
+Només s'ofereixen aquests punts de connexió:
 
 | URL             | Mètode | Resultat                                    |
 | --------------- | ------ | ------------------------------------------- |
@@ -61,6 +61,16 @@ Després aquest token és el que servirà per poder crear i elimiar colors ...
 
   
 El programa hauria de fer algunes comprovacions més, retornar errors de més tipus, i totes aquestes coses, però com que l'objectiu només era provar els testos (i ara JWT) per ara ho deixo així
+
+## Swagger
+
+S'ha afegit documentació Swagger per l'API. Es pot trobar un cop estigui en marxa el projecte a: 
+
+| URL                 | Mètode | Resultat                                                                      |
+| ------------------- | ------ | ----------------------------------------------------------------------------- |
+| /swagger            | GET    | Mostra la documentació en format Swagger                                      |
+
+
 
 ## Tests funcionals
 

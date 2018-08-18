@@ -82,10 +82,9 @@ namespace colorsRest.Tests.UnitTests
 
             notfound.Should().BeOfType<NotFoundObjectResult>()
                 .Which.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
-
-            var content = notfound.Value;
-            var message = content.GetType().GetProperty("message").GetValue(content, null) as string;
-            Assert.Equal("Not Found", message);
+            var content = notfound.Value as Error;
+            
+            Assert.Equal("Not Found", content.Message);
         }
 
 
@@ -94,10 +93,11 @@ namespace colorsRest.Tests.UnitTests
         {
             // Given
             var expected = Helper.TestColors[0];
-            Color colorToAdd = new Color();
-            colorToAdd.Nom = expected.Nom;
-            colorToAdd.Rgb = expected.Rgb;
-
+            Color colorToAdd = new Color
+            {
+                Nom = expected.Nom,
+                Rgb = expected.Rgb
+            };
             // When
             var result = _controller.Add(colorToAdd);
 
@@ -169,9 +169,8 @@ namespace colorsRest.Tests.UnitTests
 
             // Then
             Assert.IsType<BadRequestObjectResult>(badResponse);
-            var content = badResponse.Value;
-            var message = content.GetType().GetProperty("message").GetValue(content, null) as string;
-            Assert.Equal(expectedMessage, message);
+            var content = badResponse.Value as Error;
+            Assert.Equal(expectedMessage, content.Message);
         }
 
         [Fact]

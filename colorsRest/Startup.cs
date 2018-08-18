@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,6 +19,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace colorsRest
 {
@@ -65,12 +69,40 @@ namespace colorsRest
             services.AddMvc();
             services.AddCors();
             services.AddScoped<IColorsRepository, ColorsRepository>();
+
+            services.AddSwaggerGen(swagger =>
+            {
+                var contact = new Contact() { Name = SwaggerConfiguration.ContactName, Url = SwaggerConfiguration.ContactUrl };
+                swagger.SwaggerDoc(SwaggerConfiguration.DocNameV1,
+                                   new Info
+                                   {
+                                       Title = SwaggerConfiguration.DocInfoTitle,
+                                       Version = SwaggerConfiguration.DocInfoVersion,
+                                       Description = SwaggerConfiguration.DocInfoDescription,
+                                       Contact = contact
+                                   }
+                                    );
+                // Afegir comentaris com a documentació
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                swagger.IncludeXmlComments(xmlPath);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+
+                // Enable middleware to serve generated Swagger as a JSON endpoint.
+            
+            app.UseSwagger();
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint(SwaggerConfiguration.EndpointUrl, SwaggerConfiguration.EndpointDescription);
+            });
+
 
             // Amb WithOrigins es pot limitar qui pot fer les peticions
             app.UseCors(builder =>
