@@ -7,7 +7,7 @@ public static class SwaggerConfiguration
         get { return "/swagger/v1/swagger.json"; }
     }
     public static string ContactName { get { return "Utrescu"; } }
-    public static string ContactUrl = "https://github.com/utrescu/NetCore-ColorRest";
+    public static string ContactUrl { get { return "https://github.com/utrescu/NetCore-ColorRest"; } }
     public static string DocNameV1 { get { return "v1"; } }
     public static string DocInfoTitle { get { return "Colors API"; } }
     public static string DocInfoVersion { get { return "v1"; } }
